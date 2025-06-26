@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { createXRStore, XR } from '@react-three/xr';
 
 function MeshComponent() {
     const fileUrl = "/Rowan.glb";
@@ -61,13 +62,18 @@ function Square() {
 }
 
 export function Rowan() {
+    const store = createXRStore();
+
     return (
         <div>
+            <button onClick={() => store.enterVR()} style={{ position: "absolute", zIndex: 1, textAlign: "center" }}>Enter VR</button>
             <Canvas style={{ width: "100vw", height: "100vh" }}>
-                <ambientLight intensity={Math.PI / 2} />
-                <MeshComponent />
-                <OrbitControls position0={[0, 0, 0]} />
-                <SkyBox />
+                <XR store={store}>
+                    <ambientLight intensity={Math.PI / 2} />
+                    <MeshComponent />
+                    <OrbitControls position0={[0, 0, 0]} />
+                    <SkyBox />
+                </XR>
             </Canvas>
         </div>
     );
